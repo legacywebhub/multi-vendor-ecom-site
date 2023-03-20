@@ -280,7 +280,10 @@ def logout(request):
 def profile(request, pk):
     company = CompanyInfo.objects.last()
     user = User.objects.get(id=pk)
-    user_products = Product.objects.filter(seller=request.user, approved=True)
+    products = Product.objects.filter(seller=user, approved=True).order_by('?')
+    p = Paginator(products, 15)
+    page = request.GET.get('page')
+    user_products = p.get_page(page)
     # Getting our customer and his order
     order_data = getCustomerAndOrder(request)
 
@@ -308,7 +311,7 @@ def dashboard(request):
         orders = Order.objects.filter(complete=True)
         for order in orders:
             for orderitem in order.orderitem_set.all():
-                if orderitem.product.seller == request.user:
+                if orderitem.product.seller == request.user and orderitem.delivered == False:
                     pending_deliveries.append(orderitem)
 
 
@@ -331,6 +334,7 @@ def dashboard(request):
         'item_total': order_data['item_total'],
         'total': order_data['total'],
         'pending_deliveries': pending_deliveries,
+        'pending_deliveries_count': len(pending_deliveries),
         'product_form': product_form,
         'my_products': Product.objects.filter(seller=request.user).order_by('-date_uploaded')[:10],
         'approved_products': Product.objects.filter(seller=request.user, approved=True),
@@ -537,7 +541,7 @@ def success(request, pk):
     context = {
         'order': order,
         'item_total': item_total,
-        'total': total, 
+        'total': total,
         'company': company,
         'categories' : categories,
         'random_products':random_products,

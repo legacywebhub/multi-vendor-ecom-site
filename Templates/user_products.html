@@ -51,7 +51,7 @@
 					<td>{{ product.category }}</td>
 					<td>{{ product.name }}</td>
 					<td>{{ product.description }} </td>
-					<td>{{ product.price }} <span class="dim"> per {{product.measurement}}</span></td>
+					<td>{{company.currency_symbol}}{{ product.discount_price }} <span class="dim"> per {{product.measurement}}</span></td>
 					<td>{{ product.approved }} </td>
 					<td style="display: flex;">
 						<a href="{% url 'Store:edit_product' product.id %}"><button class="btn btn-primary"><i class="fas fa-pen"></i></button></a>

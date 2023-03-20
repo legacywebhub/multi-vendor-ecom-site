@@ -58,13 +58,14 @@
 					<div><b><i class="fas fa-phone-square-alt"></i></b> {{request.user.phone}}</div>
 					<div></div>
 				</div>
-			</div><hr><br>
+			</div><hr>
 			<div><b>KYC Status:</b> {{request.user.kyc.status}}</div><br>
 			<div><b>Verified:</b> {% if request.user.verified %} <span style="color: rgb(3, 193, 3);"><i class="fa fa-check"></i></span> {% else %} <span style="color: red;"><i class="fa fa-times"></i></span> {% endif %}</div><br>
 			<div><b>Total products:</b> {{my_products.count}}</div><br>
 			<div><b>Approved products:</b> {{approved_products.count}}</div><br>
 			<div><b>Pending products:</b> {{unapproved_products.count}}</div><br>
-			<div><b>Total orders:</b> {{my_orders.count}}</div><br>
+			<div><b>Pending deliveries:</b> {{pending_deliveries_count}}</div><br>
+			<div><b>Credibility score:</b> <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div><br>
 			<div><a href="{% url 'Store:settings' %}"><button class="btn btn-primary btn-mini"><i class="fas fa-pen"></i> Edit KYC</button></a> <a href="{% url 'Store:settings' %}"><button class="btn btn-success btn-mini"><i class="fas fa-pen"></i> Update shipping info</button></a></div>
 		</div>
 		<div class="span1"></div>
@@ -135,8 +136,8 @@
 		<h3 class="heading">Pending Deliveries</h3>
 
 		<div>
-			<h6><i>click on customer names to view shipping details...</i></h6>
 			{% if pending_deliveries %}
+			<h6><i>click on customer names to view shipping details...</i></h6>
 			<table class="table table-bordered">
 				<thead>
 				  <tr>
@@ -153,7 +154,7 @@
 				  {% for pending_delivery in pending_deliveries %}
 				  <tr>
 					<td>{{ pending_delivery.order.id }}</td>
-					<td><a href="#">{{ pending_delivery.order.user }}</a></td>
+					<td><a href="{% url 'Store:profile' pending_delivery.order.user.id %}" style="color: blue">{{ pending_delivery.order.user }}</a></td>
 					<td>
 					{% if pending_delivery.product.image1 %}
 					<a href="#"><img width="60" src="{{ pending_delivery.product.image1.url }}" alt="product image"/></a>
@@ -163,7 +164,7 @@
 					</td>
 					<td>{{ pending_delivery.product.name }}</td>
 					<td>{{ pending_delivery.quantity }}</td>
-					<td>{{ pending_delivery.product.price }} <span class="dim"> x {{pending_delivery.quantity}}({{pending_delivery.product.measurement}})</span></td>
+					<td>{{company.currency_symbol}}{{ pending_delivery.product.discount_price }} <span class="dim"> x {{pending_delivery.quantity}}({{pending_delivery.product.measurement}})</span></td>
 					<td>
 						{% if pending_delivery.delivered %}
 						<span style="color: rgb(3, 193, 3);">
@@ -216,7 +217,7 @@
 					<td>{{ product.category }}</td>
 					<td>{{ product.name }}</td>
 					<td style="max-width: 150px;">{{ product.description|truncatewords:15 }} </td>
-					<td>{{ product.price }} <span class="dim"> per {{product.measurement}}</span></td>
+					<td>{{company.currency_symbol}}{{ product.discount_price }} <span class="dim"> per {{product.measurement}}</span></td>
 					<td>
 						{% if product.approved %}
 						<span style="color: rgb(3, 193, 3);">
