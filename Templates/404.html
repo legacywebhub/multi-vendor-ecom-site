@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+	<div>
+	<ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">Error 404</li>
+	</ul>
+	<section class="section-flex">
+	<div class="container">
+		<div class="row div-flex">
+			<h2>404 Error: Sorry page not found</h2>
+			<p style="font-size:20px">
+				THE CONTENT YOU ARE SEARCHING FOR CANNOT BE FOUND OR HAS BEEN MOVED TO ANOTHER PAGE
+			</p>
+			<div style="text-align: center; margin: 30px 0;">
+			<img src="{% static 'themes/images/404.png' %}" width="600px"/>
+			</div>
+		</div>
+	</div>
+	</section>
+	</div>
+</div></div>
+</div>
+<!-- MainBody End ============================= -->
+{% endblock %}

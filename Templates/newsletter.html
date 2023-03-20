@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container">	
+    <div class="span12">
+    <h3>Send newsletter</h3>
+    {% for message in messages %}
+    <h5 {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</h5>
+    {% endfor %}
+    <form class="form-horizontal" method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <div class="control-group">
+            <input type="text" name="subject" placeholder="subject" class="input-xlarge"/>
+        </div>
+
+        <div class="control-group">
+            <textarea rows="3" cols="7" name="message" placeholder="newsletter message" class="input-xlarge"></textarea>
+        </div>
+
+        <div class="control-group">
+        <label for="file">optional*</label>
+        <input type="file" name="file" id="file"/>
+        </div>
+
+        <button class="btn btn-large btn-primary" name="newsletter-submit" type="submit">Send Newsletter</button>
+    </fieldset>
+    </form>
+    </div>
+
+</div>
+{% endblock %}

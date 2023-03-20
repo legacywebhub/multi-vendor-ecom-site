@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style>
+	.message {
+		text-align: center;
+		margin: 20px auto;
+		text-transform: capitalize;
+		font-style: italic;
+		font-size: medium;
+	}
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+	<div class="span9">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">Settings</li>
+    </ul>
+	<h3> Settings</h3>
+	{% for message in messages %}
+	<p {% if message.tags %}class="message {{ message.tags }}"{% endif %}>{{message}}</p>
+	{% endfor %}
+	<hr class="soft"/>
+
+	<div class="row">
+		{% comment %}
+		<div class="span4">
+			<div class="well">
+				<h5>Your info</h5><br/>
+				Edit if required<br/><br/><br/>
+				<form method="post">
+					{% csrf_token %}
+					{{user_form}}
+					<div class="controls">
+						<button type="submit" class="btn block" name="save-user-detail">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		{% endcomment %}
+		<div class="span4">
+			<div class="well">
+				<h5>Upgrade to seller by completing your KYC</h5><br/><br/>
+				<form method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{kyc_form|crispy}}<br><br>
+					<div class="control-group">
+						<div class="controls">
+						<button type="submit" class="btn" name="save-kyc">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="span1"> &nbsp;</div>
+		<div class="span4">
+			<div class="well">
+				<h5>Your shipping details</h5><br/><br/>
+				<form method="post">
+					{% csrf_token %}
+					{{shipping_form|crispy}}
+					<div class="control-group">
+						<div class="controls">
+						<button type="submit" class="btn" name="save-shipping-detail">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

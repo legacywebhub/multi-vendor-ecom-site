@@ -1,0 +1,47 @@
+* Fix category and side bar  -done
+* Fix authentication and authorization to sign in with email  -done
+* Fix cookie bug   -done
+* Make MyAdmin for setting website settings and currency -done
+* Flexible product image render   -done
+* Autocreate customer on user sign up -done
+* Make newsletter model and make it dessiminate emails on save - half done(not confirmed)
+* Paypal payment Integration  - half done(not confirmed)
+* Profile page to set user details and shipping - done
+* Apply dry principle - done
+* Activate other url and page i.e faqs, about, privacy, support etc -done
+* Revamp admin panel -done
+* Sitemap   - done
+* Fix feature in index page and special offer - done
+* Cart calculation bug -done
+* index page feature - done
+* product details page - done
+* Polishing our codes and urls -done
+* Page 404 and 500 -done
+* gitignore not ignoring my .env file - done
+* Configure for heroku - done
+
+
+
+* Paypal payment Integration        - done
+* Password reset functionality      - half done
+* Configure media for cloudinary
+* configure for hosting  - done
+* setup online database
+* upgrade admin dashboard to jazzmin  - done
+* delivery page to download items after payment - done
+* bug for backend not receiving data after payment - done
+* modify some images to look different from bootshop(depends on what buyer intends to sell sha) -probable
+
+
+
+# Currently working on half done features
+cloudinary and live database and hosting
+
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+    'INVALID_VIDEO_ERROR_MESSAGE': 'Please upload a valid video file.',
+}

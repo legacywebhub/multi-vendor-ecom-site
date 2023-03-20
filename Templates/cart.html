@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+	<div class="span9">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active"> SHOPPING CART</li>
+    </ul>
+	<h3>  SHOPPING CART [ <small>{{order.item_total}} Item(s) </small>]<a href="{% url 'Store:index' %}" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>	
+	<hr class="soft"/>		
+			
+	<table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th>Quantity/Update</th>
+				          <th>Price</th>
+                  <th>Shipping fee per item</th>
+                  <th>Tax</th>
+                  <th>Total</th>
+				</tr>
+              </thead>
+              <tbody>
+			    {% for item in items %}
+                <tr>
+                  <td>
+                  {% if item.product.image1 %}
+                  <a href="{% url 'Store:detail' item.product.id %}"><img width="60" src="{{ item.product.image1.url }}" alt="product image"/></a>
+                  {% else %}
+                  <a href="{% url 'Store:detail' item.product.id %}"><img width="60" src="{{ item.product.image_url1 }}" alt="product image"/></a>
+                  {% endif %}
+                  </td>
+                  <td><a href="{% url 'Store:detail' item.product.id %}">{{ item.product.name }}</a></td>
+				          <td>
+					        <div class="input-append"><input class="span1" style="max-width:34px" placeholder="{{ item.quantity }}" value="{{ item.quantity }}" id="appendedInputButtons" size="16" type="text"><button class="btn update-cart" data-product="{{item.product.id}}" data-action="subtract" type="button"><i class="icon-minus"></i></button><button class="btn update-cart" data-product="{{item.product.id}}" data-action="add" type="button"><i class="icon-plus"></i></button><button class="btn btn-danger update-cart" data-product="{{item.product.id}}" data-action="delete" type="button"><i class="icon-remove icon-white"></i></button></div>
+				          </td>
+                  <td>{{ item.product.discount_price }} <span class="dim">x{{item.quantity}}</span></td>
+                  <td>{{ item.product.shipping_fee }} <span class="dim">x{{item.quantity}}</span></td>
+                  <td>{{ item.product.tax }} <span class="dim">x{{item.quantity}}</span></td>
+                  <td>{{company.currency_symbol}}{{ item.item_total_bill }}</td>
+                </tr>
+				{% endfor %}
+
+				
+				<tr>
+                  <td colspan="6" style="text-align:right">Shipping Charges:	</td>
+                  <td> {{company.currency_symbol}}{{ order.shipping_fee_total }}</td>
+                </tr>
+                 <tr>
+                  <td colspan="6" style="text-align:right">Total Tax:	</td>
+                  <td> {{company.currency_symbol}}{{ order.tax_total }}</td>
+                </tr>
+				 <tr>
+                  <td colspan="6" style="text-align:right"><strong>TOTAL ({{company.currency_symbol}}{{order.discount_price_total}} + {{company.currency_symbol}}{{order.shipping_fee_total}} + {{company.currency_symbol}}{{order.tax_total}}) =</strong></td>
+                  <td class="label label-important" style="display:block"> <strong> {{company.currency_symbol}}{{ order.total }} </strong></td>
+                </tr>
+				</tbody>
+            </table>
+		<br><br><br>		
+	<a href="{% url 'Store:index' %}" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
+	<a href="{% url 'Store:checkout' %}" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>
+	
+</div>
+</div></div>
+</div>
+{% endblock %}
+

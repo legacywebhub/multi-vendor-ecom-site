@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style>
+	.row {
+		margin-bottom: 30px;
+	}
+	.message {
+		text-align: center;
+		margin: 20px auto;
+		text-transform: capitalize;
+		font-style: italic;
+		font-size: medium;
+	}
+	.heading {
+		text-align: left;
+		text-transform: capitalize;
+		margin-bottom: 25px;
+	}
+	.avatar {
+		width: 100px;
+	}
+	.avatar-box {
+		border: #fff 5px solid;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+	<div class="span12">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">Dashboard</li>
+    </ul>
+	<h3>My Dashboard</h3>
+	{% for message in messages %}
+	<p {% if message.tags %}class="message {{ message.tags }}"{% endif %}>{{message}}</p>
+	{% endfor %}
+	<hr class="soft"/>
+
+	<div class="container">
+	<div class="row well">
+		<div class="span5">
+			<h4 class="heading">My Info</h4>
+			<div style="display: flex; align-items: flex-start;">
+				<div class="avatar-box" style="margin-right: 20px;">
+					{% if user.kyc.approved %}
+					<img class="avatar" src="{{user.kyc.passport.url}}">
+					{% else %}
+					<img class="avatar" src="{% static 'themes/images/avatar.png' %}">
+					{% endif %}
+				</div>
+				<div>
+					<div style="text-transform: capitalize;"><b><i class="fa fa-user"></i></b> {{request.user.full_name}}</div><br>
+					<div><b><i class="fas fa-envelope"></i></b> {{request.user.email}}</div><br>
+					<div><b><i class="fas fa-phone-square-alt"></i></b> {{request.user.phone}}</div>
+					<div></div>
+				</div>
+			</div><hr><br>
+			<div><b>KYC Status:</b> {{request.user.kyc.status}}</div><br>
+			<div><b>Verified:</b> {% if request.user.verified %} <span style="color: rgb(3, 193, 3);"><i class="fa fa-check"></i></span> {% else %} <span style="color: red;"><i class="fa fa-times"></i></span> {% endif %}</div><br>
+			<div><b>Total products:</b> {{my_products.count}}</div><br>
+			<div><b>Approved products:</b> {{approved_products.count}}</div><br>
+			<div><b>Pending products:</b> {{unapproved_products.count}}</div><br>
+			<div><b>Total orders:</b> {{my_orders.count}}</div><br>
+			<div><a href="{% url 'Store:settings' %}"><button class="btn btn-primary btn-mini"><i class="fas fa-pen"></i> Edit KYC</button></a> <a href="{% url 'Store:settings' %}"><button class="btn btn-success btn-mini"><i class="fas fa-pen"></i> Update shipping info</button></a></div>
+		</div>
+		<div class="span1"></div>
+		<div class="span5">
+			<h4 class="heading">Shipping Info</h4>
+			<div><b>Address:</b> {{request.user.shippingdetail.address}}</div><hr>
+			<div><b>City:</b> {{request.user.shippingdetail.city}}</div><hr>
+			<div><b>State:</b> {{request.user.shippingdetail.state}}</div><hr>
+			<div><b>Country:</b> {{request.user.shippingdetail.country}}</div><hr>
+			<div><b>Zipcode:</b> {{request.user.shippingdetail.zipcode}}</div><hr>
+			<div><b>Phone 1:</b> {{request.user.shippingdetail.phone1}}</div><hr>
+			<div><b>Phone 2:</b> {{request.user.shippingdetail.phone2}}</div><hr>
+		</div>
+	</div>
+	</div>
+
+	<div class="row">
+		<h3 class="heading">My Recent Orders</h3>
+
+		<table class="table table-bordered">
+			<thead>
+			  <tr>
+				<th>Date</th>
+				<th>Order ID</th>
+				<th>Total bill</th>
+				<th>Number of items</th>
+				<th>Paid</th>
+				<th>Transaction ID</th>
+				<th>Received</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  {% for order in my_orders %}
+			  <tr>
+				<td>{{order.date_ordered}}</td>
+				<td>{{order.id}}</td>
+				<td>{{company.currency_symbol}}{{order.total}}</td>
+				<td>{{order.item_total}}</td>
+				<td>
+					{% if order.complete %}
+					<span style="color: rgb(3, 193, 3);">
+						<i class="fa fa-check"></i>
+					</span>
+					{% else %}
+					<span style="color: red;">
+						<i class="fa fa-times"></i>
+					</span>
+					{% endif %}
+				</td>
+				<td>{{order.transaction_id}}</td>
+				<td>
+					{% if order.delivered %}
+					<span style="color: rgb(3, 193, 3);">
+						<i class="fa fa-check"></i>
+					</span>
+					{% else %}
+					<button class="btn btn-mini btn-success received-button" data-order="{{order.id}}"><span class="btn-text">I have received order items</span></button>
+					{% endif %}
+				</td>
+			  </tr>
+			  {% endfor %}
+			  </tbody>
+		  </table><br>
+	</div>
+
+	{% if request.user.verified %}
+	<div class="row">
+		<h3 class="heading">Pending Deliveries</h3>
+
+		<div>
+			<h6><i>click on customer names to view shipping details...</i></h6>
+			{% if pending_deliveries %}
+			<table class="table table-bordered">
+				<thead>
+				  <tr>
+					<th>Order ID</th>
+					<th>Customer</th>
+					<th>Product</th>
+					<th>Product Name</th>
+					<th>Quantity</th>
+					<th>Price</th>
+					<th>Status</th> 
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for pending_delivery in pending_deliveries %}
+				  <tr>
+					<td>{{ pending_delivery.order.id }}</td>
+					<td><a href="#">{{ pending_delivery.order.user }}</a></td>
+					<td>
+					{% if pending_delivery.product.image1 %}
+					<a href="#"><img width="60" src="{{ pending_delivery.product.image1.url }}" alt="product image"/></a>
+					{% else %}
+					<a href="#"><img width="60" src="{{ pending_delivery.product.image_url1 }}" alt="product image"/></a>
+					{% endif %}
+					</td>
+					<td>{{ pending_delivery.product.name }}</td>
+					<td>{{ pending_delivery.quantity }}</td>
+					<td>{{ pending_delivery.product.price }} <span class="dim"> x {{pending_delivery.quantity}}({{pending_delivery.product.measurement}})</span></td>
+					<td>
+						{% if pending_delivery.delivered %}
+						<span style="color: rgb(3, 193, 3);">
+							<i class="fa fa-check"></i>
+						</span>
+						{% else %}
+						<span>
+							{{pending_delivery.status}}<br>
+							<button class="btn btn-primary delivered-button"><span class="btn-text">delivered</span></button>
+						</span>
+						{% endif %} 
+					</td>
+				  </tr>
+				  {% endfor %}
+				  </tbody>
+			</table>
+			{% else %}
+			<p style="font-style: italic; font-size: 20px;">No pending deliveries..</p>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row">
+		<h3 class="heading">Manage Products</h3>
+
+		<div>
+			<h4>Recent products</h4>
+			<table class="table table-bordered">
+				<thead>
+				  <tr>
+					<th>Product</th>
+					<th>Category</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Price</th>
+					<th>Approved</th>
+					<th>Action</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for product in my_products %}
+				  <tr>
+					<td>
+					{% if product.image1 %}
+					<a href="#"><img width="60" src="{{ product.image1.url }}" alt="product image"/></a>
+					{% else %}
+					<a href="#"><img width="60" src="{{ product.image_url1 }}" alt="product image"/></a>
+					{% endif %}
+					</td>
+					<td>{{ product.category }}</td>
+					<td>{{ product.name }}</td>
+					<td style="max-width: 150px;">{{ product.description|truncatewords:15 }} </td>
+					<td>{{ product.price }} <span class="dim"> per {{product.measurement}}</span></td>
+					<td>
+						{% if product.approved %}
+						<span style="color: rgb(3, 193, 3);">
+							<i class="fa fa-check"></i>
+						</span>
+						{% else %}
+						<span style="color: red;">
+							<i class="fa fa-times"></i>
+						</span>
+						{% endif %} 
+
+					</td>
+					<td style="display: flex;">
+					<a href="{% url 'Store:edit_product' product.id %}"><button class="btn btn-primary"><i class="fas fa-pen"></i></button></a>
+						<button class="btn btn-danger delete-button" data-product="{{ product.id }}"><span class="btn-text"><i class="fas fa-trash-alt"></i></span></button>
+					</td>
+				  </tr>
+				  {% endfor %}
+				  </tbody>
+			  </table><br>
+		  	<div style="text-align: right;"><a href="{% url 'Store:user_products' %}"><button class="btn btn-primary">View all products <i class="fas fa-arrow-right"></i></button></a></div>
+		</div>
+
+		<div style="margin-top: 20px;">
+			<h4>Add new product</h4>
+			<div class="well">
+			<form method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<div>
+					{{product_form|crispy}}<br>
+				  <button type="submit" class="btn btn-primary block" name="post-submit">Post</button>
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+let delBtns = document.querySelectorAll('.delete-button');
+
+
+for (let x=0; x < delBtns.length; x++) {
+    delBtns[x].addEventListener('click', function(){
+        let productId = this.dataset.product;
+        console.log(productId);
+        let btnText = this.querySelector('.btn-text');
+        btnText.innerHTML = `<img width='20' src="{% static 'themes/images/loading.gif' %}">`;
+        this.disabled = true;
+        // Perform delete request function
+		let url = '/delete_product/';
+
+		fetch(url, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrftoken,
+			},
+			body: JSON.stringify({'productId':productId})
+		})
+		.then((response)=>{
+			return response.json()
+		})
+		.then((data)=>{
+			console.log(data)
+			console.log(this.parentElement.parentElement);
+			if (data == 'success') {
+				setTimeout(()=>{
+					this.parentElement.parentElement.innerHTML = "";
+				}, 2000)
+			} else {
+				setTimeout(()=>{
+					btnText.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+					this.disabled = false;
+				}, 2000)
+			}
+		})
+    })
+}
+</script>
+<script>
+let receivedBtns= document.querySelectorAll('.received-button');
+
+
+for (let x=0; x < receivedBtns.length; x++) {
+    receivedBtns[x].addEventListener('click', function(){
+        let orderId = this.dataset.order;
+        console.log(orderId);
+        let btnText = this.querySelector('.btn-text');
+        btnText.innerHTML = `<img width='15' src="{% static 'themes/images/loading.gif' %}">`;
+        this.disabled = true;
+		let url = '/set_delivered_order/';
+
+		fetch(url, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrftoken,
+			},
+			body: JSON.stringify({'orderId':orderId})
+		})
+		.then((response)=>{
+			return response.json()
+		})
+		.then((data)=>{
+			console.log(data)
+			if (data == 'success') {
+				setTimeout(()=>{
+					this.parentElement.innerHTML = `
+					<span style="color: rgb(3, 193, 3);">
+						<i class="fa fa-check"></i>
+					</span>`;
+					alert('Thank you for your feedback and patronage')
+				}, 2000)
+			} else {
+				setTimeout(()=>{
+					btnText.innerHTML = `I have received order items`;
+					this.disabled = false;
+					alert('Kindly pay and complete this order to set shipping details!')
+				}, 2000)
+			}
+		})
+    })
+}
+</script>
+<script>
+	let deliveredBtns = document.querySelectorAll('.delivered-button');
+
+	deliveredBtns.forEach((btn)=>{
+		btn.addEventListener('click', ()=>{
+			let btnText = btn.querySelector('.btn-text');
+			btnText.innerHTML = `<img width='15' src="{% static 'themes/images/loading.gif' %}">`;
+        	btn.disabled = true;
+			setTimeout(()=>{
+				btn.innerHTML = 'delivered';
+				alert(`Customer have been notified to confirm your delivery. Thanks!`);
+			}, 2000)
+		})
+	})
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+<div class="span9">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">Products</li>
+    </ul>
+	<h3>You searched for {{search}}<small class="pull-right"> {{products_count}} products are available </small></h3>	
+	<hr class="soft"/>
+	<form class="form-horizontal span6">
+		<div class="control-group">
+		  <label class="control-label alignL">Sort By </label>
+			<select>
+              <option>Priduct name A - Z</option>
+              <option>Priduct name Z - A</option>
+              <option>Priduct Stoke</option>
+              <option>Price Lowest first</option>
+            </select>
+		</div>
+	  </form>
+	  
+<div id="myTab" class="pull-right">
+ <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
+ <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+</div>
+<br class="clr"/>
+<div class="tab-content">
+	<div class="tab-pane" id="listView">
+		{% if products %}
+		{% for product in products %}
+		<div class="row">	  
+			<div class="span2">
+				{% if product.image1 %}
+				<img src="{{ product.image1.url }}" alt="{{product.name}}"/>
+				{% elif product.image_url1  %}
+				<img src="{{ product.image_url1 }}" alt="{{product.name}}"/>
+				{% endif %}
+			</div>
+			<div class="span4">
+				<h3>{{ product.name }}</h3>
+				<h5 class="percentage-discount">%{{ product.percentage_discount }} off</h5>				
+				<hr class="soft"/>
+				<h5>{{ product.category }} </h5>
+				<p>
+					{{ product.description|truncatewords:30 }}
+				</p>
+				<a class="btn btn-small pull-right" href="{% url 'Store:detail' product.id %}">View Details</a>
+				<br class="clr"/>
+			</div>
+			<div class="span3 alignR">
+			<form class="form-horizontal qtyFrm">
+				<h4><strike style="color:red">{{company.currency_symbol}}{{ product.price }}</strike> {{company.currency_symbol}}{{ product.discount_price }}</h4>
+			<label class="checkbox">
+				<input type="checkbox">  Adds product to compair
+			</label><br/>
+			
+			  <a href="#" class="btn btn-large btn-primary update-cart" data-product="{{product.id}}" data-action="add"> Add to <i class=" icon-shopping-cart"></i></a>
+			  <a href="{% url 'Store:detail' product.id %}" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+			
+				</form>
+			</div>
+		</div>
+		<hr class="soft"/>
+		{% endfor %}
+		{% else %}
+		<h3>No products available for {{search}}</h3>
+		{% endif %}
+	</div>
+
+	<div class="tab-pane  active" id="blockView">
+		<ul class="thumbnails">
+			{% if products %}
+			{% for product in products %}
+			<li class="span3">
+			  <div class="thumbnail">
+				{% if product.image1 %}
+				<a href="{% url 'Store:detail' product.id %}"><img src="{{ product.image1.url }}" alt="{{product.name}}"/></a>
+				{% elif product.image_url1 %}
+				<a href="{% url 'Store:detail' product.id %}"><img src="{{ product.image_url1 }}" alt="{{product.name}}"/></a>
+				{% endif %}
+				<div class="caption">
+				  <h5>{{ product }}</h5>
+				  <p> 
+					{{ product.description|truncatewords:5 }} 
+				  </p>
+				   <h4 style="text-align:center"><a class="btn" href="{% url 'Store:detail' product.id %}"> <i class="icon-zoom-in"></i></a> <a class="btn update-cart" data-product="{{product.id}}" data-action="add" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">{{ product.discount_price }}</a></h4>
+				</div>
+				{% if product.percentage_discount > 0 %}
+				<span class="discount">%{{ product.percentage_discount }} off</span>
+				{% endif %}
+			  </div>
+			</li>
+			{% endfor %}
+			{% else %}
+			<h3 style="margin-left:30px;">No products available for {{search}}</h3>
+			{% endif %}
+		  </ul>
+	<hr class="soft"/>
+	</div>
+</div>
+
+	<div class="pagination">
+		<ul>
+		{% if products.has_previous %}
+		<li style="font-size:20px;"><a href="?page=1">&lsaquo; First</a></li>
+		<li style="font-size:20px;"><a href="?page={{ products.previous_page_number }}">Previous</a></li>
+		{% endif %}
+		<span style="margin-left: 3px; padding: 5px 30px; font-weight: bold; border:solid #333 .5px">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+		{% if products.has_next %}
+		<li style="font-size:20px;"><a href="?page={{ products.next_page_number }}">Next</a></li>
+		<li style="font-size:20px;"><a href="?page={{ products.paginator.num_pages }}">Last &rsaquo;</a></li>
+		{% endif %}
+		</ul>
+	</div>
+			<br class="clr"/>
+	</div>
+{% endblock %}

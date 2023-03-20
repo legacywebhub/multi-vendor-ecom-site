@@ -1,0 +1,241 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{company.name}} shop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+    <link id="callCss" rel="stylesheet" href="{% static 'themes/bootshop/bootstrap.min.css' %}" media="screen"/>
+    <link href="{% static 'themes/css/base.css' %}" rel="stylesheet" media="screen"/>
+<!-- Bootstrap style responsive -->	
+	<link href="{% static 'themes/css/bootstrap-responsive.min.css' %}" rel="stylesheet"/>
+	<link href="{% static 'themes/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
+<!-- Google-code-prettify -->	
+	<link href="{% static 'themes/js/google-code-prettify/prettify.css' %}" rel="stylesheet"/>
+<!-- fav and touch icons -->
+    <link rel="shortcut icon" href="{% static 'themes/images/ico/favicon.ico' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'themes/images/ico/apple-touch-icon-144-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'themes/images/ico/apple-touch-icon-114-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'themes/images/ico/apple-touch-icon-72-precomposed.png' %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'themes/images/ico/apple-touch-icon-57-precomposed.png' %}">
+	<style type="text/css" id="enject"></style>
+	<style>
+	.hidden {
+		display:none;
+	}
+	.category {
+		text-transform: capitalize;
+	}
+	.error {
+		color: rgba(255, 0, 0, 0.808);
+	}
+	.success {
+		color: rgba(1, 170, 1, 0.801);
+	}
+	.info {
+		color: rgba(3, 51, 211, 0.705);
+	}
+	#logo-name {
+		color: #fff;
+		font-size: large;
+		font-weight: bold;
+		font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	}
+	#popup {
+		min-width: 200px;
+		text-align: left;
+		color: #fff;
+		background-color: red;
+		padding: 5px 10px;
+		border-radius: 10px;
+		box-shadow: rgba(51, 51, 51, 0.781) 2px 2px;
+		opacity: .9;
+		position: fixed;
+		top: 30px;
+		right: 15px;
+		display: none;
+	}
+	#close-popup {
+		font-size: 20px;
+		position: absolute;
+		top: 2px;
+		right: 5px;
+		cursor: pointer;
+	}
+	#close-popup:hover {
+		font-size: 30px;
+	}
+	</style>
+
+	{% block style %}
+	{% endblock %}
+
+	<script type="text/javascript">
+		let user = '{{request.user}}'
+
+		// This is a function from django docs to generate csrftoken and set as browser cookies
+		// This can also get cookies from frontend by passing the cookie name as string parameter to getCookie() function
+		function getCookie(name) {
+		let cookieValue = null;
+		if (document.cookie && document.cookie !== '') {
+			const cookies = document.cookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				const cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) === (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+		}
+		const csrftoken = getCookie('csrftoken');
+	</script>
+  </head>
+<body>
+<div id="header">
+<div class="container">
+<div id="welcomeLine" class="row">
+    {% if user.is_authenticated %}
+	<div class="span6">Welcome! <strong><a href="{% url 'Store:dashboard' %}">{{ user.first_name }}</a></strong></div>
+    {% else %}
+    <div class="span6">Welcome! <strong>user</strong></div>
+    {% endif %}
+	<div class="span6">
+	<div class="pull-right">
+		<span class="">Fr</span>
+		<span class="">Es</span>
+		<span class="btn btn-mini">En</span>
+		<span>&pound;</span>
+		<span class="btn btn-mini">{{company.currency_symbol}}{{ order.total }}</span>
+		<span class="">{{company.currency_symbol}}</span>
+		<a href="{% url 'Store:cart' %}"><span class="btn btn-mini btn-primary"><i class="icon-shopping-cart icon-white"></i> [ {{ item_total }} ] Items in your cart </span> </a> 
+	</div>
+	</div>
+</div>
+<!-- Navbar ================================================== -->
+<div id="logoArea" class="navbar">
+<a id="smallScreen" data-target="#topMenu" data-toggle="collapse" class="btn btn-navbar">
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span>
+</a>
+  <div class="navbar-inner">
+	{% if company.logo %}
+    <a class="brand" href="{% url 'Store:index' %}"><img src="{{company.logo.url}}" alt="Logo" /></a>
+	{% elif company.name %}
+	<a class="brand" href="{% url 'Store:index' %}" id="logo-name">{{company.name}}</a>
+	{% else %}
+	<a class="brand" href="{% url 'Store:index' %}"><img src="{% static 'themes/images/logo.png' %}" alt="Logo"/></a>
+	{% endif %}
+		<form class="form-inline navbar-search" method="POST" action="#">
+		{% csrf_token %}
+		<input id="srchFld" class="srchTxt" name="search" type="text" placeholder="search product" />
+		  <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
+    	</form>
+    <ul id="topMenu" class="nav pull-right">
+	{% if user.is_authenticated %}
+	<li class=""><a href="{% url 'Store:index' %}">Home</a></li>
+	 <li class=""><a href="{% url 'Store:dashboard' %}">Dashboard</a></li>
+	 {% endif %}
+	 <li class=""><a href="{% url 'Store:contact' %}">Contact us</a></li>
+	 <li class="">
+	 {% if user.is_authenticated %}
+	 <a href="{% url 'Store:logout' %}" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Logout</span></a>
+	 {% else %}
+	 <a href="{% url 'Store:login' %}" role="button" data-toggle="modal" style="padding-right:0"><span class="btn btn-large btn-success">Login</span></a>
+	 {% endif %}
+	</li>
+    </ul>
+  </div>
+</div>
+</div>
+</div>
+<!-- Header End====================================================================== -->
+
+{% block carousel %}
+{% endblock %}
+
+<div id="mainBody">
+	<div class="container">
+		<div class="row">
+			{% block sidebar %}
+			{% endblock  %}
+
+			{% block body %}
+			{% endblock %}
+		</div>
+		</div>
+	</div>
+	<div id="popup"><h5>This is a popup</h5><span id="close-popup">&times;</span></div>
+</div>
+
+<!-- Footer ================================================================== -->
+	<div  id="footerSection">
+	<div class="container">
+		<div class="row">
+			<div class="span3">
+				<h5>ACCOUNT</h5>
+				<a href="{% url 'Store:dashboard' %}">YOUR ACCOUNT</a>
+				<a href="{% url 'Store:dashboard' %}">PERSONAL INFORMATION</a> 
+				<a href="{% url 'Store:dashboard' %}">ADDRESSES</a>
+				<a href="{% url 'Store:settings' %}">SETTINGS</a>
+				<a href="#">DISCOUNT</a>  
+				<a href="#">ORDER HISTORY</a>
+			 </div>
+			<div class="span3">
+				<h5>INFORMATION</h5>
+				{% if request.user.is_superuser %}
+				<a href="{% url 'Store:newsletter' %}">NEWSLETTER</a>  
+				{% endif %}
+				<a href="{% url 'Store:contact' %}">CONTACT</a>  
+				<a href="{% url 'Store:login' %}">REGISTRATION</a>  
+				<a href="{% url 'Store:legal' %}">LEGAL NOTICE</a>  
+				<a href="{% url 'Store:tac' %}">TERMS AND CONDITIONS</a> 
+				<a href="{% url 'Store:faq' %}">FAQ</a>
+			 </div>
+			<div class="span3">
+				<h5>OUR OFFERS</h5>
+				<a href="#">NEW PRODUCTS</a> 
+				<a href="#">TOP SELLERS</a>
+				{% if user.is_authenticated %}  
+				<a href="{% url 'Store:special' %}">SPECIAL OFFERS</a>
+				{% endif %} 
+				<a href="#">MANUFACTURERS</a> 
+				<a href="#">SUPPLIERS</a> 
+			 </div>
+			<div id="socialMedia" class="span3 pull-right">
+				<h5>SOCIAL MEDIA </h5>
+				{% if company.facebook_link %}
+				<a href="{{company.facebook_link}}"><img width="60" height="60" src="{% static 'themes/images/facebook.png' %}" title="facebook" alt="facebook link"/></a>
+				{% endif %}
+				{% if company.twitter_link %}
+				<a href="{{company.twitter_link}}"><img width="60" height="60" src="{% static 'themes/images/twitter.png' %}" title="twitter" alt="twitter link"/></a>
+				{% endif %}
+				{% if company.youtube_link %}
+				<a href="company.youtube_link"><img width="60" height="60" src="{% static 'themes/images/youtube.png' %}" title="youtube" alt="youtube link"/></a>
+				{% endif %}
+			 </div> 
+		 </div>
+		<p class="pull-right">&copy; Bootshop</p>
+	</div><!-- Container End -->
+	</div>
+<!-- Placed at the end of the document so the pages load faster ============================================= -->
+	<script src="{% static 'themes/js/jquery.js' %}" type="text/javascript"></script>
+	<script src="{% static 'themes/js/bootstrap.min.js' %}" type="text/javascript"></script>
+	<script src="{% static 'themes/js/google-code-prettify/prettify.js' %}"></script>
+	
+	<script src="{% static 'themes/js/bootshop.js' %}"></script>
+    <script src="{% static 'themes/js/jquery.lightbox-0.5.js' %}"></script>
+
+	<script src="{% static 'themes/js/cart.js' %}"></script>
+	<script src="{% static 'themes/js/all.min.js' %}"></script>
+	{% block script %}
+	{% endblock %}
+</body>
+</html>

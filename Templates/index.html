@@ -1,0 +1,222 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block carousel %}
+{% if user.is_authenticated %}
+<div id="carouselBlk">
+	<div id="myCarousel" class="carousel slide">
+		<div class="carousel-inner">
+		  <div class="item active">
+		  <div class="container">
+			<a href="{% url 'Store:special' %}"><img style="width:100%" src="{% static 'themes/images/carousel/1.png' %}" alt="special offers"/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		  <div class="item">
+		  <div class="container">
+			<a href="{% url 'Store:special' %}"><img style="width:100%" src="{% static 'themes/images/carousel/2.png' %}" alt=""/></a>
+				<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		  <div class="item">
+		  <div class="container">
+			<a href="{% url 'Store:special' %}"><img src="{% static 'themes/images/carousel/3.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+			
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:special' %}"><img src="{% static 'themes/images/carousel/4.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		   
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:special' %}"><img src="{% static 'themes/images/carousel/5.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+			</div>
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:special' %}"><img src="{% static 'themes/images/carousel/6.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		</div>
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	  </div> 
+</div>
+{% else %}
+<div id="carouselBlk">
+	<div id="myCarousel" class="carousel slide">
+		<div class="carousel-inner">
+		  <div class="item active">
+		  <div class="container">
+			<a href="{% url 'Store:login' %}"><img style="width:100%" src="{% static 'themes/images/carousel/1.png' %}" alt="special offers"/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		  <div class="item">
+		  <div class="container">
+			<a href="{% url 'Store:login' %}"><img style="width:100%" src="{% static 'themes/images/carousel/2.png' %}" alt=""/></a>
+				<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		  <div class="item">
+		  <div class="container">
+			<a href="{% url 'Store:login' %}"><img src="{% static 'themes/images/carousel/3.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+			
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:login' %}"><img src="{% static 'themes/images/carousel/4.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		   
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:login' %}"><img src="{% static 'themes/images/carousel/5.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+			</div>
+		  </div>
+		  </div>
+		   <div class="item">
+		   <div class="container">
+			<a href="{% url 'Store:login' %}"><img src="{% static 'themes/images/carousel/6.png' %}" alt=""/></a>
+			<div class="carousel-caption">
+				  <h4>Second Thumbnail label</h4>
+				  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+				</div>
+		  </div>
+		  </div>
+		</div>
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	  </div> 
+</div>
+{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+		<div class="span9">		
+			<div class="well well-small">
+			<h4>Newest Products <small class="pull-right">200+ featured products</small></h4>
+			<div class="row-fluid">
+			<div id="featured" class="carousel slide">
+			<div class="carousel-inner">
+			  <div class="item active">
+			  <ul class="thumbnails">
+				{% for new_product in new_products reversed %}
+				<li class="span3">
+				  <div class="thumbnail">
+				  <i class="tag"></i>
+					{% if new_product.image1 %}
+					<a href="{% url 'Store:detail' new_product.id %}"><img src="{{new_product.image1.url}}" alt="{{new_product.name}}"></a>
+					{% else %}
+					<a href="{% url 'Store:detail' new_product.id %}"><img src="{{new_product.image_url1}}" alt="{{new_product.name}}"></a>
+					{% endif %}
+					<div class="caption">
+					  <h5>{{new_product.name}}</h5>
+					  <h4><a class="btn" href="{% url 'Store:detail' new_product.id %}">VIEW</a> <span class="pull-right">{{company.currency_symbol}}{{new_product.discount_price}}</span></h4>
+					</div>
+				  </div>
+				</li>
+				{% endfor %}
+			  </ul>
+			  </div>
+
+			  </div>
+			  <a class="left carousel-control" href="#featured" data-slide="prev">‹</a>
+			  <a class="right carousel-control" href="#featured" data-slide="next">›</a>
+			  </div>
+			  </div>
+		</div>
+		<h4>Products Gallery</h4>
+			  <ul class="thumbnails">
+			  	{% for product in products reversed %}
+				<li class="span3">
+				  <div class="thumbnail">
+					{% if product.image1 %}
+					<a  href="{% url 'Store:detail' product.id %}"><img src="{{ product.image1.url }}" alt="{{product.name}}"/></a>
+					{% else %}
+					<a  href="{% url 'Store:detail' product.id %}"><img src="{{ product.image_url1 }}" alt="{{product.name}}"/></a>
+					{% endif %}
+					<div class="caption">
+					  <h5>{{ product.name }}</h5>
+					  <p> 
+						{{ product.description|truncatewords:10 }} 
+					  </p>	 
+					  <h4 style="text-align:center"><a class="btn" href="{% url 'Store:detail' product.id %}"> <i class="icon-zoom-in"></i></a> <a class="btn update-cart" data-product="{{ product.id }}" data-action="add">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">{{company.currency_symbol}}{{ product.discount_price }}</a></h4>
+					</div>
+					{% if product.percentage_discount > 0 %}
+					<span class="discount">%{{ product.percentage_discount }} off</span>
+					{% endif %}
+				  </div>
+				</li>
+				{% endfor %}
+			  </ul>
+			  <br>
+			  <br>
+			  <br>
+			  <div class="pagination" style="display:flex; justify-content:center; align-items:center">
+			  <ul>
+			  {% if products.has_previous %}
+			  <li style="font-size:20px;"><a href="?page=1">&lsaquo; First</a></li>
+			  <li style="font-size:20px;"><a href="?page={{ products.previous_page_number }}">Previous</a></li>
+			  {% endif %}
+			   <span style="margin-left: 3px; padding: 5px 30px; font-weight: bold; border:solid #333 .5px">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+			  {% if products.has_next %}
+			  <li style="font-size:20px;"><a href="?page={{ products.next_page_number }}">Next</a></li>
+			  <li style="font-size:20px;"><a href="?page={{ products.paginator.num_pages }}">Last &rsaquo;</a></li>
+			  {% endif %}
+			  </ul>
+			  </div>
+		</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+

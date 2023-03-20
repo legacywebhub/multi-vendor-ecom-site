@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+	.products-count {
+		font-weight: lighter;
+		font-size: smaller;
+		font-style: italic;
+	}
+	.title {
+		padding: 0 10px ;
+		display: flex;
+		justify-content: space-between;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="span12">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">My Products</li>
+    </ul>
+
+	<h4 class="title"><span>My Products</span><span class="products-count">{{products_count}} product(s)</span></h4>
+	<div class="row">
+		<div class="span12">
+			<table class="table table-bordered">
+				<thead>
+				  <tr>
+					<th>Product</th>
+					<th>Category</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Price</th>
+					<th>Approved</th>
+					<th>Action</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for product in user_products %}
+				  <tr>
+					<td>
+					{% if product.image1 %}
+					<a href="#"><img width="60" src="{{ product.image1.url }}" alt="product image"/></a>
+					{% else %}
+					<a href="#"><img width="60" src="{{ product.image_url1 }}" alt="product image"/></a>
+					{% endif %}
+					</td>
+					<td>{{ product.category }}</td>
+					<td>{{ product.name }}</td>
+					<td>{{ product.description }} </td>
+					<td>{{ product.price }} <span class="dim"> per {{product.measurement}}</span></td>
+					<td>{{ product.approved }} </td>
+					<td style="display: flex;">
+						<a href="{% url 'Store:edit_product' product.id %}"><button class="btn btn-primary"><i class="fas fa-pen"></i></button></a>
+						<button class="btn btn-danger delete-button" data-product="{{ product.id }}"><span class="btn-text"><i class="fas fa-trash-alt"></i></span></button>
+					</td>
+				  </tr>
+				  {% endfor %}
+				  </tbody>
+			  </table>
+		  <br><br>
+		</div>
+	</div>
+
+
+	<div class="pagination">
+		<ul>
+		{% if user_products.has_previous %}
+		<li style="font-size:20px;"><a href="?page=1">&lsaquo; First</a></li>
+		<li style="font-size:20px;"><a href="?page={{ user_products.previous_page_number }}">Previous</a></li>
+		{% endif %}
+		<span style="margin-left: 3px; padding: 5px 30px; font-weight: bold; border:solid #333 .5px">Page {{ user_products.number }} of {{ user_products.paginator.num_pages }}</span>
+		{% if user_products.has_next %}
+		<li style="font-size:20px;"><a href="?page={{ user_products.next_page_number }}">Next</a></li>
+		<li style="font-size:20px;"><a href="?page={{ user_products.paginator.num_pages }}">Last &rsaquo;</a></li>
+		{% endif %}
+		</ul>
+	</div>
+	<br class="clr"/>
+	</div>
+{% endblock %}

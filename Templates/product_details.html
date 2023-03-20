@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+	<div class="span9">
+    <ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'Store:category' product.category %}">Products</a> <span class="divider">/</span></li>
+    <li class="active">product Details</li>
+    </ul>
+	{% for message in messages %}
+	<p {% if message.tags %}class="message {{ message.tags }}"{% endif %}>{{message}}</p>
+	{% endfor %}	
+	<div class="row">	  
+			<div id="gallery" class="span3">
+			{% if product.image1 %}
+            <a href="{{ product.image1.url }}" title="{{ product.name }}">
+				<img src="{{ product.image1.url }}" style="width:100%" alt="{{ product.name }}"/>
+            </a>
+			{% else %}
+			<a href="{{ product.image_url1 }}" title="{{ product.name }}">
+				<img src="{{ product.image_url1 }}" style="width:100%" alt="{{ product.name }}"/>
+            </a>
+			{% endif %}
+			<div id="differentview" class="moreOptopm carousel slide">
+                <div class="carousel-inner">
+                  <div class="item active">
+				   {% if product.image2 %}
+                   <a href="{{ product.image2.url }}"> <img style="width:29%" src="{{ product.image2.url }}" alt="{{ product.name }}"/></a>
+				   {% elif product.image_url2 %}
+                   <a href="{{ product.image_url2 }}" > <img style="width:29%" src="{{ product.image_url2 }}" alt="{{ product.name }}"/></a>
+				   {% endif %}
+                  </div>
+                  <div class="item">
+				   {% if product.image3 %}
+                   <a href="{{ product.image3.url }}"> <img style="width:29%" src="{{ product.image3.url }}" alt="{{ product.name }}"/></a>
+				   {% elif product.image_url3 %}
+                   <a href="{{ product.image_url3 }}"> <img style="width:29%" src="{{ product.image_url3 }}" alt="{{ product.name }}"/></a>
+				   {% endif %}
+                  </div>
+                </div>
+              <!--  
+			  <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+              <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a> 
+			  -->
+              </div>
+			  
+			 <div class="btn-toolbar">
+			  <div class="btn-group">
+				<span class="btn"><i class="icon-envelope"></i></span>
+				<span class="btn" ><i class="icon-print"></i></span>
+				<span class="btn" ><i class="icon-zoom-in"></i></span>
+				<span class="btn" ><i class="icon-star"></i></span>
+				<span class="btn" ><i class=" icon-thumbs-up"></i></span>
+				<span class="btn" ><i class="icon-thumbs-down"></i></span>
+			  </div>
+			</div>
+			</div>
+			<div class="span6">
+				<h3>{{ product.name }}  </h3>
+				<small>- {{ product.measurement }}</small>
+				<hr class="soft"/>
+				<form class="form-horizontal qtyFrm" method='post'>
+				{% csrf_token %}
+				  <div class="control-group">
+					<label class="control-label">{% if product.percentage_discount > 0 %}<span style="color:red"><strike>{{company.currency_symbol}}{{ product.price }}</strike></span>{% endif %} <span>{{company.currency_symbol}}{{ product.discount_price }}</span></label>
+					<div class="controls">
+					<input type="number" name="quantity" class="span1" placeholder="Qty."/>
+					  <button type="submit" class="btn btn-large btn-primary pull-right" name="add-item-quantity"> Add to cart <i class=" icon-shopping-cart"></i></button>
+					</div>
+				  </div>
+				</form>
+				{% comment %}
+				<hr class="soft"/>
+				 <h4>100 items in stock</h4>
+				<form class="form-horizontal qtyFrm pull-right">
+				  <div class="control-group">
+					<label class="control-label"><span>Color</span></label>
+					<div class="controls">
+					  <select class="span2">
+						  <option>Black</option>
+						  <option>Red</option>
+						  <option>Blue</option>
+						  <option>Brown</option>
+						</select>
+					</div>
+				  </div>
+				</form>
+				{% endcomment %}
+				<hr class="soft clr"/>
+				<p>
+				{{ product.description }}
+				</p>
+				<br class="clr"/>
+			<a href="#" name="detail"></a>
+			<hr class="soft"/>
+			</div>
+			
+			<div class="span9">
+            <ul id="productDetail" class="nav nav-tabs">
+              <li class="active"><a href="#home" data-toggle="tab">Product Details</a></li>
+              <li><a href="#profile" data-toggle="tab">Other Farmer's Products</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+              <div class="tab-pane fade active in" id="home">
+			  <h4>Product Information</h4>
+                <table class="table table-bordered">
+				<tbody>
+				<tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Product name:</td><td class="techSpecTD2">{{ product.name }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Category:</td><td class="techSpecTD2">{{ product.category }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Price:</td><td class="techSpecTD2">{{ product.price }} per {{ product.measurement }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Shipping fee:</td><td class="techSpecTD2">{{company.currency_symbol}}{{ product.shipping_fee }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Farmer: </td><td class="techSpecTD2"><a href="{% url 'Store:profile' product.seller.id %}">{{ product.seller.full_name }}</a></td></tr>
+				</tbody>
+				</table>
+				{% comment %}
+				<h3>Manufacturer/Editorial Reviews</h3>
+				<div id="review">{{product.description}}</div>
+				{% endcomment %}
+              </div>
+		<div class="tab-pane fade" id="profile">
+		<div id="myTab" class="pull-right">
+		 <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
+		 <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+		</div>
+		<br class="clr"/>
+		<hr class="soft"/>
+		<div class="tab-content">
+			<div class="tab-pane" id="listView">
+				{% for other_product in other_products %}
+				<div class="row">	  
+					<div class="span2">
+						{% if other_product.image1 %}
+						<img src="{{other_product.image1.url}}" alt="product image"/>
+						{% else %}
+						<img src="{{other_product.image_url1.url}}" alt="product image"/>
+						{% endif %}
+					</div>
+					<div class="span4">
+						<h3>{{other_product.name}}</h3>				
+						<hr class="soft"/>
+						<h5>{{other_product.category}}</h5>
+						<p>
+							{{other_product.description|truncatewords:25}}
+						</p>
+						<a class="btn btn-small pull-right" href="{% url 'Store:detail' other_product.id %}">View Details</a>
+						<br class="clr"/>
+					</div>
+					<div class="span3 alignR">
+					<form class="form-horizontal qtyFrm">
+					<h3>{% if other_product.percentage_discount > 0 %}<span style="color:red"><strike>{{company.currency_symbol}}{{ other_product.price }}</strike></span>{% endif %} <span>{{company.currency_symbol}}{{ other_product.discount_price }}</span></h3>
+					<label class="checkbox">
+						<input type="checkbox">  Adds product to compair
+					</label><br/>
+					<div class="btn-group">
+					  <a href="#" class="btn btn-large btn-primary update-cart" data-product="{{other_product.id}}" data-action="add"> Add to <i class=" icon-shopping-cart"></i></a>
+					  <a href="{% url 'Store:detail' other_product.id %}" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+					 </div>
+						</form>
+					</div>
+			</div>
+			<hr class="soft"/>
+			{% endfor %}
+		</div>
+			<div class="tab-pane active" id="blockView">
+				<ul class="thumbnails">
+					{% for other_product in other_products %}
+					<li class="span3">
+					  <div class="thumbnail">
+						{% if other_product.image1 %}
+						<a href="{% url 'Store:detail' other_product.id %}"><img src="{{other_product.image1.url}}" alt="product image"/></a>
+						{% elif other_product.image_url1 %}
+						<a href="{% url 'Store:detail' other_product.id %}"><img src="{{other_product.image_url1}}" alt="product image"/></a>
+						{% endif %}
+						<div class="caption">
+						  <h5>{{other_product.name}}</h5>
+						  <p> 
+							{{other_product.category}}
+						  </p>
+						  <h4 style="text-align:center"><a class="btn" href="{% url 'Store:detail' other_product.id %}"> <i class="icon-zoom-in"></i></a> <a href="#" class="btn update-cart" data-action="add" data-product="{{other_product.id}}">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">{{company.currency_symbol}}{{ other_product.discount_price }}</a></h4>
+						</div>
+						{% if product.percentage_discount > 0 %}
+						<span class="discount">%{{ product.percentage_discount }} off</span>
+						{% endif %}
+					  </div>
+					</li>
+					{% endfor %}
+				  </ul>
+			<hr class="soft"/>
+			</div>
+		</div>
+				<br class="clr">
+	</div>
+		</div>
+          </div>
+
+			</div>
+		  </div>
+		</div> 
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style>
+	.message {
+		text-align: center;
+		margin: 20px auto;
+		text-transform: capitalize;
+		font-style: italic;
+		font-size: medium;
+	}
+	.product-images {
+		margin: 20px 0;
+		display: flex;
+		justify-content: flex-start;
+		align-items:flex-end;
+		flex-wrap:wrap;
+	}
+	.product-image {
+		width: 30%;
+		margin-right: 20px;
+	}
+</style>
+{% endblock %}
+
+
+{% block body %}
+	<div class="span12">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">product update</li>
+    </ul>
+	<h3>Edit Product</h3><hr class="soft">
+	{% for message in messages %}
+	<p {% if message.tags %}class="message {{ message.tags }}"{% endif %}>{{message}}</p>
+	{% endfor %}
+
+	<div class="product-images">
+		{% if product.image1 %}
+		<img class="product-image" src="{{ product.image1.url }}">
+		{% endif %}
+		{% if product.image2 %}
+		<img class="product-image" src="{{ product.image2.url }}">
+		{% endif %}
+		{% if product.image3 %}
+		<img class="product-image" src="{{ product.image3.url }}">
+		{% endif %}
+	</div>
+
+	<div class="row">
+		<div class="span12">
+			<div class="well">
+				<form method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{product_form|crispy}}<br><br>
+					<div class="control-group">
+						<div class="controls">
+						<button type="submit" class="btn btn-primary" name="save-shipping-detail">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

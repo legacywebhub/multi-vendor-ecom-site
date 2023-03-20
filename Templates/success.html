@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block sidebar %}
+{% include 'sidebar.html' %}
+{% endblock  %}
+
+{% block body %}
+	<div class="span9">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active"> SUCCESS PAGE</li>
+    </ul>
+	<h3>ORDER AND PURCHASE SUCCESSFUL<a href="{% url 'Store:index' %}" class="btn btn-large pull-right"><i class="icon-arrow-left"></i> Continue Shopping </a></h3>	
+	<hr class="soft"/>			
+
+  <h4 class="success">Your purchase was successful and your products would be shipped to you soon</h4>
+  <h4 class="success" id="message"></h4>
+</div>
+</div></div>
+</div>
+
+{% block script %}
+<script>
+  let successMessage = sessionStorage.getItem('successMessage'),
+      message = document.getElementById('message');
+
+  message.innerText = successMessage;
+</script>
+{% endblock %}
+{% endblock %}

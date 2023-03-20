@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+	.row {
+		margin-bottom: 30px;
+	}
+	.message {
+		text-align: center;
+		margin: 20px auto;
+		text-transform: capitalize;
+		font-style: italic;
+		font-size: medium;
+	}
+	.heading {
+		text-align: left;
+		text-transform: capitalize;
+		margin-bottom: 25px;
+	}
+	.avatar {
+		width: 100%;
+	}
+	.avatar-box {
+		border: #fff 5px solid;
+		max-width: 200px;
+	}
+</style>
+{% endblock %}
+
+{% block body %}
+	<div class="span12">
+    <ul class="breadcrumb">
+		<li><a href="/">Home</a> <span class="divider">/</span></li>
+		<li class="active">Profile</li>
+    </ul>
+	<h3>User profile</h3>
+	{% for message in messages %}
+	<p {% if message.tags %}class="message {{ message.tags }}"{% endif %}>{{message}}</p>
+	{% endfor %}
+	<hr class="soft"/>
+
+	<div class="container">
+	<div class="row well">
+		<div class="span5">
+			<h4 class="heading">My Info</h4>
+			<div>
+				<div class="avatar-box" style="margin-right: 20px;">
+					{% if user.kyc.approved %}
+					<img class="avatar" src="{{user.kyc.passport.url}}">
+					{% else %}
+					<img class="avatar" src="{% static 'themes/images/avatar.png' %}">
+					{% endif %}
+				</div><br>
+				<div>
+					<div style="text-transform: capitalize;"><b><i class="fa fa-user"></i></b> {{user.full_name}}</div><br>
+					<div><b><i class="fas fa-envelope"></i></b> {{user.email}}</div><br>
+					<div><b><i class="fas fa-phone-square-alt"></i></b> {{user.phone}}</div><br>
+					{% if user.verified %}
+					<div><b>Verified:</b> {% if user.verified %} <span style="color: rgb(3, 193, 3);"><i class="fa fa-check"></i></span> {% else %} <span style="color: red;"><i class="fa fa-times"></i></span> {% endif %}</div><br>
+					<div><b>Total products:</b> {{user_products.count}}</div><br>
+					{% endif %}
+				</div>
+			</div><hr><br>
+		</div>
+		<div class="span1"></div>
+		<div class="span5">
+			<h4 class="heading">Shipping Info</h4>
+			<div><b>Address:</b> {{user.shippingdetail.address}}</div><hr>
+			<div><b>City:</b> {{user.shippingdetail.city}}</div><hr>
+			<div><b>State:</b> {{user.shippingdetail.state}}</div><hr>
+			<div><b>Country:</b> {{user.shippingdetail.country}}</div><hr>
+			<div><b>Zipcode:</b> {{user.shippingdetail.zipcode}}</div><hr>
+			<div><b>Phone 1:</b> {{user.shippingdetail.phone1}}</div><hr>
+			<div><b>Phone 2:</b> {{user.shippingdetail.phone2}}</div><hr>
+		</div>
+	</div>
+	</div>
+
+	{% if user.verified %}
+	<div class="row">
+		<h3 class="heading">User Products</h3>
+
+		<div>
+			<table class="table table-bordered">
+				<thead>
+				  <tr>
+					<th>Product</th>
+					<th>Category</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Price</th>
+					<th>Action</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for product in user_products %}
+				  <tr>
+					<td>
+					{% if product.image1 %}
+					<a href="#"><img width="60" src="{{ product.image1.url }}" alt="product image"/></a>
+					{% else %}
+					<a href="#"><img width="60" src="{{ product.image_url1 }}" alt="product image"/></a>
+					{% endif %}
+					</td>
+					<td>{{ product.category }}</td>
+					<td>{{ product.name }}</td>
+					<td style="max-width: 150px;">{{ product.description|truncatewords:15 }} </td>
+					<td>{{ product.price }} <span class="dim"> per {{product.measurement}}</span></td>
+					<td style="display: flex;">
+                        <h4 style="text-align:center"><a class="btn" href="{% url 'Store:detail' product.id %}"> <i class="icon-zoom-in"></i></a> <a class="btn update-cart" data-product="{{ product.id }}" data-action="add">Add to <i class="icon-shopping-cart"></i></a></h4>
+					</td>
+				  </tr>
+				  {% endfor %}
+				</tbody>
+			</table><br>
+		</div>
+
+		<div class="pagination">
+			<ul>
+			{% if user_products.has_previous %}
+			<li style="font-size:20px;"><a href="?page=1">&lsaquo; First</a></li>
+			<li style="font-size:20px;"><a href="?page={{ user_products.previous_page_number }}">Previous</a></li>
+			{% endif %}
+			<span style="margin-left: 3px; padding: 5px 30px; font-weight: bold; border:solid #333 .5px">Page {{ user_products.number }} of {{ user_products.paginator.num_pages }}</span>
+			{% if user_products.has_next %}
+			<li style="font-size:20px;"><a href="?page={{ user_products.next_page_number }}">Next</a></li>
+			<li style="font-size:20px;"><a href="?page={{ user_products.paginator.num_pages }}">Last &rsaquo;</a></li>
+			{% endif %}
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+{% endblock %}
