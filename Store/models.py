@@ -4,27 +4,29 @@ from django.contrib.auth.models import PermissionsMixin
 
 
 measures = (
-        ('kilos', 'kilos'),
-        ('grams', 'grams'),
-        ('kilograms', 'kilograms'),
-        ('pieces', 'pieces'),
-        ('crates', 'crates'),
-        ('rolls', 'rolls'),
-        ('cups', 'cups'),
-        ('paints', 'paints'),
-        ('sacks', 'sacks'),
-        ('bags', 'bags'),
+        ('kilo', 'kilo'),
+        ('gram', 'gram'),
+        ('kilogram', 'kilogram'),
+        ('piece', 'piece'),
+        ('crate', 'crate'),
+        ('roll', 'roll'),
+        ('cup', 'cup'),
+        ('can', 'can'),
+        ('bottle', 'bottle'),
+        ('paint', 'paint'),
+        ('sack', 'sack'),
+        ('bag', 'bag'),
         ('package', 'package'),
-        ('baskets', 'baskets'),
-        ('buckets', 'buckets'),
-        ('trucks', 'trucks'),
+        ('basket', 'basket'),
+        ('bucket', 'bucket'),
+        ('truck', 'truck'),
 )
 # Create your models here.
 
 # This model holds general values, ads, address, links and other info of our site or app 
 class CompanyInfo(models.Model):
     logo = models.ImageField(upload_to="images/company", blank=True, null=True)
-    name = models.CharField(max_length=150, blank=False, null=False)
+    name = models.CharField(max_length=150, blank=True, null=True)
     address = models.CharField(max_length=150, blank=True, null=True)
     country = models.CharField(max_length=60, blank=True, null=True)
     email = models.EmailField(blank=False, null=False)
@@ -42,7 +44,7 @@ class CompanyInfo(models.Model):
     google_analytics = models.TextField(max_length=3000, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+            return self.name
     
     def save(self, *args, **kwargs):
         if not self.id and CompanyInfo.objects.exists():

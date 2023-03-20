@@ -1,5 +1,5 @@
 # About
-This is an agro based multi-vendor ecommerce web app made with javascript, python/django for backend.
+This is an AGRO-BASED MULTI-VENDOR ECOMMERCE WEB APP made with javascript, AJAX, python/django for backend.
 It has total of 20+ pages which includes index, register/login, profile, cart,
 special offer, checkout, contact, faq, legal notice, tac(terms & condition),
 product detail, product category, error pages(404 and 500) and password reset pages.
@@ -7,16 +7,20 @@ product detail, product category, error pages(404 and 500) and password reset pa
 Users register as buyers and have option to upgrade to a vendor or seller by completing their KYC
 and getting approved. Vendors can see their details, kyc status, orders, pending delivery (per order item)
 and manage products on their dashboard. The ecom site act as an escrow so vendors can only be paid after
-customers confirm they have received good by clicking a confirmation button on the order via the dashboard.
+customers confirm they have received good by clicking a confirmation button on the order via their dashboard.
+Vendors provide their bank account details while uploading their kyc (know your customer) so escrow can send
+their funds after delivery of goods.
+
 Customers can also access vendors profile information via product detail page and also other vendor products
  
 # Features
 * Cart functionality with javascript.
+* KYC and dashboard for each user
+* Vendor credibility feature
 * Product images have url slot to fetch images from external sources to save server
   bandwidth.
 * Special offers page which includes products with discount of 15% and above and free
   shipping.
-* Visitors can make purchases without signing up but can't have access to special offers.
 * Payment integration with paystack and paypal.
 * Error 404 and 500 pages implemented to handle error pages.
 * Password reset functionality.

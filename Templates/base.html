@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{{company.name}} shop</title>
+    <title>{% if company.name %}{{company.name}}{% else %}AgroHub{% endif %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -59,15 +59,8 @@
 		right: 15px;
 		display: none;
 	}
-	#close-popup {
-		font-size: 20px;
-		position: absolute;
-		top: 2px;
-		right: 5px;
-		cursor: pointer;
-	}
-	#close-popup:hover {
-		font-size: 30px;
+	.fa-star {
+		color: rgba(255, 217, 0, 0.806);
 	}
 	</style>
 
@@ -172,7 +165,6 @@
 		</div>
 		</div>
 	</div>
-	<div id="popup"><h5>This is a popup</h5><span id="close-popup">&times;</span></div>
 </div>
 
 <!-- Footer ================================================================== -->

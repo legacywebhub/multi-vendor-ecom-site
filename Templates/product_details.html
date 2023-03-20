@@ -63,12 +63,12 @@
 			</div>
 			<div class="span6">
 				<h3>{{ product.name }}  </h3>
-				<small>- {{ product.measurement }}</small>
+				<small>- <b><a href="{% url 'Store:profile' product.seller.id %}" style="color: blue;">{{ product.seller.full_name }}</a> ({{product.seller.kyc.company}})</b></small>
 				<hr class="soft"/>
 				<form class="form-horizontal qtyFrm" method='post'>
 				{% csrf_token %}
 				  <div class="control-group">
-					<label class="control-label">{% if product.percentage_discount > 0 %}<span style="color:red"><strike>{{company.currency_symbol}}{{ product.price }}</strike></span>{% endif %} <span>{{company.currency_symbol}}{{ product.discount_price }}</span></label>
+					<label class="control-label">{% if product.percentage_discount > 0 %}<span style="color:red"><strike>{{company.currency_symbol}}{{ product.price }}</strike></span>{% endif %} <span>{{company.currency_symbol}}{{ product.discount_price }} per {{product.measurement}}</span></label>
 					<div class="controls">
 					<input type="number" name="quantity" class="span1" placeholder="Qty."/>
 					  <button type="submit" class="btn btn-large btn-primary pull-right" name="add-item-quantity"> Add to cart <i class=" icon-shopping-cart"></i></button>
@@ -114,9 +114,12 @@
 				<tr class="techSpecRow"><th colspan="2">Product Details</th></tr>
 				<tr class="techSpecRow"><td class="techSpecTD1">Product name:</td><td class="techSpecTD2">{{ product.name }}</td></tr>
 				<tr class="techSpecRow"><td class="techSpecTD1">Category:</td><td class="techSpecTD2">{{ product.category }}</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Price:</td><td class="techSpecTD2">{{ product.price }} per {{ product.measurement }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Price:</td><td class="techSpecTD2">{{company.currency_symbol}}{{ product.discount_price }} per {{ product.measurement }}</td></tr>
 				<tr class="techSpecRow"><td class="techSpecTD1">Shipping fee:</td><td class="techSpecTD2">{{company.currency_symbol}}{{ product.shipping_fee }}</td></tr>
-				<tr class="techSpecRow"><td class="techSpecTD1">Farmer: </td><td class="techSpecTD2"><a href="{% url 'Store:profile' product.seller.id %}">{{ product.seller.full_name }}</a></td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Company: </td><td class="techSpecTD2">{{product.seller.kyc.company}}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Farmer: </td><td class="techSpecTD2"><a href="{% url 'Store:profile' product.seller.id %}" style="color: blue;">{{ product.seller.full_name }}</a></td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Farmer's phone number:</td><td class="techSpecTD2">{{ product.seller.phone }}</td></tr>
+				<tr class="techSpecRow"><td class="techSpecTD1">Farmer's credibility score:</td><td class="techSpecTD2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></td></tr>
 				</tbody>
 				</table>
 				{% comment %}
