@@ -1,15 +1,23 @@
-updateBtns = document.getElementsByClassName('update-cart');
+let updateBtns = document.getElementsByClassName('update-cart'),
+    popup = document.querySelector('#popup'),
+    closePopup = popup.querySelector('#close-popup');
+
+
+closePopup.addEventListener('click', ()=>{
+    popup.style.display='none';
+})
 
 for (i=0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function(){
         let productId = this.dataset.product;
         let action = this.dataset.action;
         console.log('ProductId:',productId, 'Action:', action);
+        console.log(user);
 
 
         if(user == 'AnonymousUser'){
             // If user is not authenticated
-            updateUserOrder(productId, action);
+            displayErrorMessage('Please sign in to create your cart', 'green', 3000);
         } else {
             // If user is authenticated
             updateUserOrder(productId, action);
@@ -35,4 +43,15 @@ function updateUserOrder(productId, action){
         console.log('data:', data)
         location.reload()
     })
+}
+
+
+
+function displayErrorMessage(message, bgcolor, time) {
+    popup.innerHtml = `<h6>${message}</h6>`;
+    popup.style.backgroundColor = bgcolor;
+    popup.style.display = 'contents';
+    setTimeout(()=>{
+        popup.style.display = 'none';
+    }, time)
 }
